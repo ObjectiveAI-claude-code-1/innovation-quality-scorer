@@ -1,78 +1,97 @@
 # Innovation Quality Scorer
 
-A scalar function that evaluates the creative and innovative merit of startup ideas.
+A scalar function that evaluates the innovation quality of startup ideas and pitches, returning a score from 0 (derivative, no innovation) to 1 (exceptional, paradigm-shifting innovation).
 
 ## Overview
 
-This function analyzes startup ideas across multiple dimensions of innovation quality, returning a score from 0 (completely derivative) to 1 (genuinely groundbreaking). It's designed to assess the thinking behind an idea rather than its execution viability.
+This function analyzes startup pitches across multiple dimensions to provide a comprehensive assessment of innovation quality. It evaluates whether an idea represents genuine innovation or merely derivative thinking, helping investors, accelerators, and founders assess the innovative merit of concepts.
 
 ## Input
 
-The function accepts startup ideas in multiple formats:
+The function accepts a single `idea` field that can be:
 
-- **Text**: Elevator pitches, executive summaries, one-liners, or detailed descriptions
-- **Image**: Pitch deck slides, napkin sketches, product mockups, or concept diagrams
-- **Audio**: Recorded pitches, founder interviews, or verbal explanations
-- **Video**: Demo videos, pitch recordings, or prototype demonstrations
-- **Composite**: Arrays combining multiple elements (e.g., pitch deck with text, images, and embedded videos)
-
-## Evaluation Dimensions
-
-### Conceptual Novelty
-- **Core Concept Novelty**: Is this genuinely new or derivative?
-- **Problem Reframing**: Does it reveal new ways of understanding existing problems?
-
-### Technical/Business Model Innovation
-- **Technical Innovation**: Genuine breakthroughs vs. trendy tech applications
-- **Business Model Innovation**: Novel value creation and capture mechanisms
-
-### Insight Depth
-- **Domain Insight Depth**: Evidence of hard-won, non-obvious domain knowledge
-- **Contrarian Knowledge**: Specific, substantiated beliefs that contradict conventional wisdom
-
-### Cliché Avoidance
-- **Structural Cliché Avoidance**: Avoiding "Uber for X" or "A meets B" patterns
-- **Buzzword Independence**: Technology as specific capability, not magic words
-- **Market Claim Authenticity**: Specific market insight vs. lazy "$X billion market" claims
-
-### First-Principles Thinking
-- **First-Principles Evidence**: Reasoning from fundamental truths
-- **Assumption Identification**: Explicitly questioning domain assumptions
-- **Solution Inevitability**: Solutions derived from deep analysis, not arbitrary choices
-
-### Holistic Assessment
-- **Paradigm Shift Potential**: Potential to fundamentally reshape its domain
-- **Overall Innovation Quality**: Comprehensive assessment across all dimensions
+- **Text**: A written pitch (elevator pitch, one-pager, detailed description)
+- **Image**: Visual pitch materials (pitch deck slides, product mockups, diagrams)
+- **Audio**: Recorded verbal pitches or founder explanations
+- **Video**: Video presentations, demos, or pitch recordings
+- **Composite**: An array combining any of the above formats
 
 ## Output
 
 A scalar score between 0 and 1:
 
-| Score Range | Category | Description |
-|-------------|----------|-------------|
-| 0.0 - 0.2 | Derivative | Essentially a copy with no distinguishing insight |
-| 0.2 - 0.4 | Incremental | Modest improvements to existing concepts |
-| 0.4 - 0.6 | Solid | Genuine thought and some novelty |
-| 0.6 - 0.8 | Innovative | Genuinely new approaches or non-obvious insights |
-| 0.8 - 1.0 | Exceptional | Potential paradigm shift with profound originality |
+| Score Range | Interpretation |
+|-------------|----------------|
+| 0.0 - 0.2 | **Derivative** - Pattern-matching without genuine innovation |
+| 0.2 - 0.4 | **Incremental** - Modest improvements to existing concepts |
+| 0.4 - 0.6 | **Solid** - Some novelty, applies approaches to new domains |
+| 0.6 - 0.8 | **Innovative** - Genuinely new approaches, first-principles thinking |
+| 0.8 - 1.0 | **Exceptional** - Potential paradigm shift, new conceptual categories |
+
+## Evaluation Criteria
+
+### 1. Conceptual Novelty
+- **Core Concept Novelty**: Does the idea introduce genuinely new paradigms or is it derivative ("Uber for X")?
+- **Problem Reframing**: Does it reveal new ways of understanding existing problems?
+
+### 2. Technical/Business Model Innovation
+- **Technical Innovation**: Genuine technical breakthroughs or novel applications of technology?
+- **Business Model Innovation**: New value creation or capture mechanisms?
+
+### 3. Insight Depth
+- **Domain Understanding**: Evidence of deep, non-obvious knowledge about the problem space?
+- **Contrarian Knowledge**: Specific insights that contradict conventional wisdom?
+
+### 4. Cliché Avoidance
+- **Structural Clichés**: Avoids "X for Y" or "A meets B" formulations?
+- **Buzzword Independence**: Technology described specifically, not as magic words?
+- **Market Claim Authenticity**: Thoughtful market insights vs. lazy "1% of huge market" claims?
+
+### 5. First-Principles Thinking
+- **First-Principles Evidence**: Reasoning from fundamentals rather than analogy?
+- **Assumption Identification**: Explicitly challenges key assumptions?
+- **Solution Inevitability**: Solution feels derived from deep analysis, not arbitrary?
+- **Paradigm Shift Potential**: Could fundamentally change an industry?
 
 ## Example Usage
 
+### Text Pitch (Low Innovation)
 ```json
 {
-  "idea": "A platform that uses satellite imagery and machine learning to predict crop yields 6 months in advance, enabling farmers in developing countries to secure fair-price forward contracts before harvest."
+  "idea": "We're building Uber for dog walking. Our AI-powered platform connects dog owners with verified walkers."
+}
+```
+Expected: Low score (0.2-0.4) - Pure derivative with buzzword reliance
+
+### Text Pitch (High Innovation)
+```json
+{
+  "idea": "We questioned why textbooks cost $200 when printing costs are $5. Publishers must recoup development costs from small markets. We're creating textbooks generated by AI, reviewed by experts paid per-chapter, distributed at marginal cost. This isn't cheaper textbooks—it's a different economic model where content creation scales freely."
+}
+```
+Expected: High score (0.7-0.9) - First-principles reasoning, novel business model
+
+### Composite Pitch
+```json
+{
+  "idea": [
+    "Our insight came from 5 years in Kenya observing M-Pesa's limitations.",
+    {"type": "image_url", "image_url": {"url": "https://example.com/product-demo.png"}},
+    "We're not building 'banking for Africa'—we're designing financial tools from scratch for communities where trust is local and identity is relational."
+  ]
 }
 ```
 
-## Key Distinctions
+## Important Notes
 
-The function distinguishes between:
-- Being first in a geography vs. conceptual novelty
-- Using AI/blockchain as buzzwords vs. specific technical innovation
-- "Faster/cheaper/better" vs. paradigm shifts
-- Pattern-matching to successful companies vs. first-principles reasoning
-- Surface-level market claims vs. genuine customer insight
+- The score measures **innovation quality**, not likelihood of business success
+- Production quality of the pitch does not influence the assessment
+- Highly innovative ideas may fail due to execution; moderate ideas may succeed with great execution
+- The function evaluates the thinking behind the idea, not market size or team credentials
 
-## Note
+## Use Cases
 
-This scorer evaluates innovation merit, not execution viability. A highly innovative idea may still face significant market, technical, or operational challenges. The question answered is "How innovative is this thinking?" not "Will this succeed?"
+- **Venture Capital Screening**: Initial filter to focus attention on genuinely innovative deals
+- **Accelerator Selection**: Assess innovation quality as part of cohort selection
+- **Founder Self-Assessment**: Stress-test ideas before seeking funding
+- **Innovation Portfolio Analysis**: Assess whether investments skew innovative or incremental

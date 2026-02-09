@@ -1,31 +1,30 @@
 {
   "type": "scalar.function",
-  "description": "Evaluates the creative and innovative merit of a startup idea. Returns a score from 0 (completely derivative) to 1 (genuinely groundbreaking). Assesses conceptual novelty, technical/business model innovation, insight depth, cliché avoidance, and first-principles thinking. Accepts text, image, audio, video, or composite pitches.",
+  "description": "Scores the innovation quality of a startup idea or pitch. Returns a value from 0 (derivative, no innovation) to 1 (exceptional, paradigm-shifting innovation). Evaluates conceptual novelty, technical and business model innovation, insight depth, cliché avoidance, and first-principles thinking. Accepts text, image, audio, video, or composite pitches.",
   "input_schema": {
     "type": "object",
-    "description": "Input for the innovation quality scorer. Accepts a startup idea in various formats.",
     "properties": {
       "idea": {
         "anyOf": [
           {
             "type": "string",
-            "description": "A text-based startup pitch (elevator pitch, executive summary, one-liner, detailed description, etc.)"
+            "description": "A text pitch."
           },
           {
             "type": "image",
-            "description": "A visual startup pitch (pitch deck slide, napkin sketch, product mockup, concept diagram, etc.)"
+            "description": "An image pitch."
           },
           {
             "type": "audio",
-            "description": "An audio startup pitch (recorded elevator pitch, founder interview, verbal explanation, etc.)"
+            "description": "An audio pitch."
           },
           {
             "type": "video",
-            "description": "A video startup pitch (demo video, pitch recording, prototype demonstration, vision film, etc.)"
+            "description": "A video pitch."
           },
           {
             "type": "array",
-            "description": "A composite startup pitch combining multiple elements (pitch deck with text, images, and embedded videos)",
+            "description": "A composite pitch with multiple parts.",
             "items": {
               "anyOf": [
                 {
