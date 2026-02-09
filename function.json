@@ -1,0 +1,485 @@
+{
+  "type": "scalar.function",
+  "description": "Evaluates the innovative merit of a startup idea. Returns a score from 0 (purely derivative) to 1 (breakthrough innovation). Assesses five dimensions: conceptual novelty, technical/business model innovation, insight depth, cliché avoidance, and first-principles thinking. Accepts text, image, audio, video, or composite pitches.",
+  "input_schema": {
+    "type": "object",
+    "description": "Input for the innovation quality scorer",
+    "properties": {
+      "idea": {
+        "anyOf": [
+          {
+            "type": "string",
+            "description": "A text-based startup idea pitch or description"
+          },
+          {
+            "type": "image",
+            "description": "An image-based pitch (pitch deck slide, mockup, diagram)"
+          },
+          {
+            "type": "audio",
+            "description": "An audio pitch (verbal pitch, podcast clip)"
+          },
+          {
+            "type": "video",
+            "description": "A video pitch (demo video, pitch recording)"
+          },
+          {
+            "type": "array",
+            "description": "A composite pitch with multiple parts (e.g., slides + narration)",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "image"
+                },
+                {
+                  "type": "audio"
+                },
+                {
+                  "type": "video"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "required": [
+      "idea"
+    ]
+  },
+  "tasks": [
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for DOMAIN COMBINATION NOVELTY. Rate whether the idea combines elements from disparate domains in unexpected ways.\n\nConsider:\n- Does the idea connect concepts from different industries, fields, or problem spaces?\n- Is the combination unprecedented or has it been done many times before?\n- Does the synthesis create emergent properties greater than the sum of parts?\n- Would the combination surprise domain experts?\n\nYou must choose between LOW (single domain or common combination) or HIGH (unexpected cross-domain synthesis)."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "LOW - The idea operates within a single familiar domain or combines elements that are commonly combined. No unexpected cross-domain synthesis."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "HIGH - The idea synthesizes disparate domains in unexpected ways, creating genuinely novel conceptual territory that would surprise experts."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][1]"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for PROBLEM FRAMING NOVELTY. Rate whether the idea reframes an existing problem in a genuinely new way.\n\nConsider:\n- Does the idea define the problem differently than existing solutions?\n- Is there a novel perspective on what the 'real' problem is?\n- Does the framing reveal something hidden about the problem space?\n- Would the problem statement itself surprise people familiar with the space?\n\nYou must choose between LOW (conventional framing) or HIGH (novel reframing)."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "LOW - The idea accepts conventional problem framing and offers a solution within that established frame. The problem definition is standard."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "HIGH - The idea reframes the problem in a novel way that changes what solutions are even possible. The problem definition itself is innovative."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][1]"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for TECHNICAL APPROACH INNOVATION. Rate whether the idea proposes genuinely novel technical approaches, algorithms, architectures, or uses of technology.\n\nConsider:\n- Does the idea propose new technical methods rather than applying existing ones conventionally?\n- Is there innovation in how technologies are combined or integrated?\n- Does the technical approach enable something previously impossible (not just easier)?\n- Is the technology use substantive rather than decorative?\n\nChoose the single best answer."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "None: No meaningful technical component, or technology is purely conventional. Standard tech stack applied in standard ways."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Low: Uses existing technology in standard ways. Technology is incidental to the idea, not a differentiator."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Medium: Applies existing technology in somewhat novel ways or to new domains. Some technical creativity evident."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "High: Proposes genuinely novel technical approaches, architectures, or unprecedented technology combinations that enable new capabilities."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][0] * 0.0 + output['scores'][1] * 0.33 + output['scores'][2] * 0.67 + output['scores'][3] * 1.0"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for BUSINESS MODEL INNOVATION. Rate whether the idea proposes novel mechanisms for creating, delivering, or capturing value.\n\nConsider:\n- Is there innovation in how value is created (new value propositions, new resource configurations)?\n- Is there innovation in how value is delivered (new channels, new partnerships)?\n- Is there innovation in how value is captured (novel pricing, new revenue mechanisms)?\n- Does the business model challenge industry conventions?\n\nChoose the single best answer."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "None: Standard business model for the category. Nothing novel in how value is created, delivered, or captured."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Low: Minor variations on established business models. Small tweaks to conventional approaches."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Medium: Meaningful business model variations or creative combinations of existing models. Some novelty in value flow."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "High: Genuinely novel business model that creates new categories of value creation or capture. Would be studied in business schools."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][0] * 0.0 + output['scores'][1] * 0.33 + output['scores'][2] * 0.67 + output['scores'][3] * 1.0"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for DOMAIN KNOWLEDGE DEPTH. Rate whether the idea reveals deep understanding of the problem domain or appears to be surface-level pattern matching.\n\nConsider:\n- Does the pitch reveal non-obvious knowledge about the domain?\n- Is there evidence of understanding why existing solutions fail?\n- Does the idea anticipate objections that would only occur to domain experts?\n- Is there evidence of genuine experience with the problem space?\n\nChoose the single best answer."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "Shallow: No evidence of domain understanding. Could have been generated from a template or trend report."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Surface: Basic understanding of the domain but no non-obvious insights. Knows the space exists but not its nuances."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Moderate: Shows solid domain knowledge with some non-obvious observations. Evidence of real engagement with the problem."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Deep: Reveals expert-level understanding with insights that would surprise domain experts. Clear evidence of years of experience or research."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][0] * 0.0 + output['scores'][1] * 0.33 + output['scores'][2] * 0.67 + output['scores'][3] * 1.0"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for CONTRARIAN INSIGHT PRESENCE. Rate whether the idea contains a 'secret'—a belief that is both non-consensus and potentially correct.\n\nConsider:\n- Does the idea rest on a belief that most people would disagree with?\n- Is there an explanation for why the conventional wisdom is wrong?\n- Does the contrarian element seem well-reasoned rather than arbitrary?\n- Would success of the idea prove something surprising about the world?\n\nYou must choose between ABSENT (follows conventional wisdom) or PRESENT (contains contrarian insight)."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "ABSENT - The idea follows conventional wisdom. Success would not prove anything surprising. No contrarian 'secret' is evident."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "PRESENT - The idea rests on a contrarian insight that, if correct, would overturn common assumptions. There is a non-obvious 'secret' here."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][1]"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for FORMULA LANGUAGE AVOIDANCE. Rate whether the idea relies on startup formula language and clichés, or communicates authentically.\n\nConsider:\n- Does the pitch avoid 'Uber for X' and similar formulaic descriptions?\n- Are buzzwords (AI, blockchain, disruption, synergy) used with precision or as empty placeholders?\n- Does the language feel authentic and specific rather than templated?\n- Would removing buzzwords leave substantive content?\n\nYou must choose between FORMULAIC (heavy cliché use) or AUTHENTIC (genuine communication)."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "FORMULAIC - Heavy reliance on startup clichés, formula descriptions ('X for Y'), and buzzword accumulation. Language is templated and generic."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "AUTHENTIC - Communicates in specific, precise language that couldn't apply to any other idea. Buzzwords, if present, are used with precision."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][1]"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for SPECIFICITY AND SUBSTANCE. Rate whether the idea contains concrete, specific content or remains at an abstract, hand-wavy level.\n\nConsider:\n- Are claims specific and verifiable rather than vague and aspirational?\n- Does the pitch include concrete details about how things work?\n- Is the problem described with specificity (which customers, what pain, why now)?\n- Does the solution explain mechanisms rather than just outcomes?\n\nChoose the single best answer."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "Vague: Purely abstract with no concrete details about problem, solution, or mechanism. All aspiration, no substance."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "General: Some specificity but mostly high-level. Could describe many different ideas in the same space."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Specific: Clear specificity about problem, solution, and mechanism. Distinguishable from alternatives. Real details present."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Highly Specific: Exceptionally concrete. Reveals deep thought about exactly how things work. Mechanisms are explained, not just outcomes."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][0] * 0.0 + output['scores'][1] * 0.33 + output['scores'][2] * 0.67 + output['scores'][3] * 1.0"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for ASSUMPTION QUESTIONING. Rate whether the idea questions assumptions that others take for granted, or accepts industry conventions.\n\nConsider:\n- Does the idea challenge fundamental assumptions in its space?\n- Is there evidence of asking 'why?' repeatedly to reach foundational truths?\n- Does the idea reject constraints that others accept as given?\n- Are industry conventions examined rather than assumed?\n\nYou must choose between CONVENTIONAL (accepts assumptions) or QUESTIONING (challenges assumptions)."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "CONVENTIONAL - Accepts industry assumptions and conventions. Innovates within established constraints without questioning them."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "QUESTIONING - Challenges fundamental assumptions. Asks why things must be as they are. Rejects constraints others accept as given."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][1]"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are an expert innovation analyst evaluating startup ideas for FOUNDATIONAL REASONING EVIDENCE. Rate whether the idea demonstrates reasoning from fundamental constraints and possibilities, rather than from analogy to existing solutions.\n\nConsider:\n- Does the pitch explain why the solution must be this way based on fundamental constraints?\n- Is there evidence of working backward from physics, economics, or human nature?\n- Does the reasoning avoid 'because competitors do it' or 'because that's how it's done'?\n- Would the idea survive if industry conventions changed completely?\n\nChoose the single best answer."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": {
+            "$starlark": "[{'type': 'text', 'text': input['idea']}] if type(input['idea']) == 'string' else ([input['idea']] if type(input['idea']) == 'dict' else [{'type': 'text', 'text': x} if type(x) == 'string' else x for x in input['idea']])"
+          }
+        }
+      ],
+      "responses": [
+        [
+          {
+            "type": "text",
+            "text": "Pure Analogy: Entirely based on copying or adapting existing solutions. 'X for Y' reasoning with no fundamental justification."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Mostly Analogy: Primarily analogical with minor first-principles elements. Some reasoning but mostly pattern-matching."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Mostly First-Principles: Primarily derived from fundamentals with some analogical elements. Clear evidence of reasoning from constraints."
+          }
+        ],
+        [
+          {
+            "type": "text",
+            "text": "Pure First-Principles: Entirely derived from fundamental constraints and possibilities. Industry-convention-independent reasoning throughout."
+          }
+        ]
+      ],
+      "output": {
+        "$starlark": "output['scores'][0] * 0.0 + output['scores'][1] * 0.33 + output['scores'][2] * 0.67 + output['scores'][3] * 1.0"
+      }
+    }
+  ]
+}
