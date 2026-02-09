@@ -4,33 +4,40 @@ A scalar function that evaluates the creative and innovative merit of a single s
 
 ## Input Schema
 
-The input is an object with an `idea` field that contains a single startup idea. The idea can be:
+The input is an object with an `idea` field. The `idea` field uses anyOf to accept:
 - A string (text pitch or description)
-- An image (pitch deck slide, mockup)
-- An audio (audio pitch)
-- A video (video pitch or demo)
-- An array of the above (composite pitch with multiple parts)
+- An image (type: image)
+- An audio (type: audio)
+- A video (type: video)
+- An array of strings and/or multimodal elements (composite pitch)
 
+Example input schema structure:
 ```json
 {
-  "idea": "An AI-powered personal stylist that uses your existing wardrobe photos to suggest daily outfits and shopping recommendations."
+  "type": "object",
+  "properties": {
+    "idea": {
+      "anyOf": [
+        {"type": "string"},
+        {"type": "image"},
+        {"type": "audio"},
+        {"type": "video"},
+        {"type": "array", "items": {"anyOf": [{"type": "string"}, {"type": "image"}, {"type": "audio"}, {"type": "video"}]}}
+      ]
+    }
+  },
+  "required": ["idea"]
 }
 ```
 
 ## Output
 
-A scalar score in [0, 1] representing the idea's innovation quality, where 1.0 indicates breakthrough innovation and 0.0 indicates purely derivative thinking.
+A scalar score in [0, 1] representing innovation quality.
 
 ## Evaluation Criteria
 
-Evaluate based on five dimensions:
-
-1. **Conceptual Novelty**: Is this genuinely new or a marginal improvement? Does it combine elements unexpectedly? Would it surprise domain experts?
-
-2. **Technical/Business Model Innovation**: Is there new technology, algorithm, or process? Does the business model create value in a novel way?
-
-3. **Insight Depth**: Does the idea stem from deep domain expertise or genuine customer understanding? Is there a non-obvious insight?
-
-4. **Cliché Avoidance**: Does it avoid startup clichés ("Uber for X")? Does it transcend buzzword territory with substance?
-
-5. **First-Principles Thinking**: Does it reason from first principles rather than analogy? Does it question assumptions others take for granted?
+1. **Conceptual Novelty**: Is this genuinely new or derivative?
+2. **Technical/Business Model Innovation**: Is there new technology or novel business model?
+3. **Insight Depth**: Does it stem from deep domain expertise?
+4. **Cliché Avoidance**: Does it avoid Uber for X patterns?
+5. **First-Principles Thinking**: Does it reason from first principles?

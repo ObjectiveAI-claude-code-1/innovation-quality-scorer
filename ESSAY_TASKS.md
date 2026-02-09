@@ -1,253 +1,330 @@
 # Innovation Quality Scorer: Task Definitions
 
-This document defines the key evaluation tasks that the Innovation Quality Scorer function must perform. Each task corresponds to a specific dimension or sub-dimension of innovation quality as articulated in ESSAY.md. These tasks will be implemented as `vector.completion` tasks in the function's `tasks` array.
+This document defines the evaluation tasks that comprise the Innovation Quality Scorer function. Each task evaluates a specific dimension of innovation quality as outlined in ESSAY.md. The tasks are designed to be executed independently and their outputs aggregated to produce a final innovation quality score from 0 (completely derivative) to 1 (genuinely groundbreaking).
 
 ---
 
-## Overview of Task Structure
+## Task 1: Core Concept Novelty
 
-The function evaluates startup ideas across five core dimensions, with some dimensions benefiting from sub-task decomposition for more nuanced evaluation:
+**Purpose:** Evaluate whether the startup idea introduces a genuinely new concept or is fundamentally derivative.
 
-1. **Conceptual Novelty** (2 tasks)
-2. **Technical/Business Model Innovation** (2 tasks)
-3. **Insight Depth** (2 tasks)
-4. **Cliché Avoidance** (2 tasks)
-5. **First-Principles Thinking** (2 tasks)
+**What to evaluate:**
+- Has this specific concept been proposed before in the startup/business world?
+- If similar ideas exist, does this represent a meaningfully different approach?
+- Does the idea introduce new conceptual categories or transcend existing ones?
+- Would explaining the idea require creating new vocabulary or mental models?
 
-Each task produces a score that contributes to the final innovation quality assessment.
+**Scoring guidance:**
+- LOW: The idea is essentially a copy of existing businesses ("Uber for X", "Airbnb for Y") or an obvious recombination of existing elements with no new insight
+- HIGH: The idea introduces genuinely new paradigms, perspectives, or conceptual combinations that feel unprecedented
 
----
-
-## Dimension 1: Conceptual Novelty
-
-### Task 1.1: Domain Combination Novelty
-
-**Purpose**: Evaluate whether the idea combines elements from disparate domains in unexpected ways, or whether it remains within a single familiar category.
-
-**Evaluation Criteria**:
-- Does the idea connect concepts from different industries, fields, or problem spaces?
-- Is the combination unprecedented or has it been done many times before?
-- Does the synthesis create emergent properties greater than the sum of parts?
-- Would the combination surprise domain experts?
-
-**Response Scale**: Binary (LOW/HIGH)
-- LOW: The idea operates within a single familiar domain or combines elements that are commonly combined
-- HIGH: The idea synthesizes disparate domains in unexpected ways, creating genuinely novel conceptual territory
-
-**Rationale**: True conceptual novelty often emerges at the intersection of domains. Airbnb combined hospitality with peer-to-peer marketplaces; Stripe combined developer tools with payment processing. This task captures that cross-pollination dimension.
+**Key distinctions:**
+- Being "first in a geography" is NOT conceptual novelty
+- Combining two existing features is NOT conceptual novelty unless the combination reveals something new
+- Applying known concepts to new domains CAN be novel if it reveals new insights
+- True novelty often requires new language to describe it
 
 ---
 
-### Task 1.2: Problem Framing Novelty
+## Task 2: Problem Reframing
 
-**Purpose**: Evaluate whether the idea reframes an existing problem in a genuinely new way, or whether it accepts the conventional problem definition.
+**Purpose:** Evaluate whether the idea reframes an existing problem in a fundamentally new way.
 
-**Evaluation Criteria**:
-- Does the idea define the problem differently than existing solutions?
-- Is there a novel perspective on what the "real" problem is?
-- Does the framing reveal something hidden about the problem space?
-- Would the problem statement itself surprise people familiar with the space?
+**What to evaluate:**
+- Does the idea reveal a new way of understanding an existing problem?
+- Does it challenge the assumptions embedded in how others have defined the problem?
+- Does it identify root causes that others have missed?
+- Does it transform how stakeholders would think about their situation?
 
-**Response Scale**: Binary (LOW/HIGH)
-- LOW: The idea accepts conventional problem framing and offers a solution within that frame
-- HIGH: The idea reframes the problem in a novel way that changes what solutions are even possible
+**Scoring guidance:**
+- LOW: The idea accepts the conventional framing of the problem and proposes incremental solutions within that framing
+- HIGH: The idea fundamentally reframes the problem in a way that opens up entirely new solution spaces
 
-**Rationale**: Sometimes innovation lies not in the solution but in reconceptualizing the problem. Reframing "how do we make taxis faster?" as "how do we optimize idle transportation capacity?" opens entirely different solution spaces.
-
----
-
-## Dimension 2: Technical/Business Model Innovation
-
-### Task 2.1: Technical Approach Innovation
-
-**Purpose**: Evaluate whether the idea proposes genuinely novel technical approaches, algorithms, architectures, or uses of technology.
-
-**Evaluation Criteria**:
-- Does the idea propose new technical methods rather than applying existing ones conventionally?
-- Is there innovation in how technologies are combined or integrated?
-- Does the technical approach enable something previously impossible (not just easier)?
-- Is the technology use substantive rather than decorative?
-
-**Response Scale**: 4-level (None/Low/Medium/High)
-- None: No meaningful technical component, or technology is purely conventional
-- Low: Uses existing technology in standard ways; technology is incidental to the idea
-- Medium: Applies existing technology in somewhat novel ways or to new domains
-- High: Proposes genuinely novel technical approaches, architectures, or unprecedented technology combinations
-
-**Rationale**: Technical innovation is a key driver of startup differentiation. This task distinguishes ideas that merely use technology from those that advance it.
+**Key distinctions:**
+- "Making X faster/cheaper/easier" is NOT reframing
+- Identifying that the "real problem" is different from the apparent problem IS reframing
+- Revealing hidden assumptions in the conventional approach IS reframing
+- Shifting from symptoms to root causes IS reframing
 
 ---
 
-### Task 2.2: Business Model Innovation
+## Task 3: Technical Innovation
 
-**Purpose**: Evaluate whether the idea proposes novel mechanisms for creating, delivering, or capturing value.
+**Purpose:** Evaluate whether the idea leverages genuinely new technology or applies existing technology in fundamentally new ways.
 
-**Evaluation Criteria**:
-- Is there innovation in how value is created (new value propositions, new resource configurations)?
-- Is there innovation in how value is delivered (new channels, new partnerships)?
-- Is there innovation in how value is captured (novel pricing, new revenue mechanisms)?
-- Does the business model challenge industry conventions?
+**What to evaluate:**
+- Does the idea leverage a genuinely new scientific or technical advance?
+- Does it apply existing technology to solve problems previously considered intractable?
+- Does it achieve dramatically better performance (10x, not 10%) on important metrics?
+- Is the technical approach itself innovative, or merely the application of trendy tech?
 
-**Response Scale**: 4-level (None/Low/Medium/High)
-- None: Standard business model for the category; nothing novel in how value flows
-- Low: Minor variations on established business models
-- Medium: Meaningful business model variations or creative combinations of existing models
-- High: Genuinely novel business model that creates new categories of value creation or capture
+**Scoring guidance:**
+- LOW: The idea uses standard technology in standard ways; technical implementation is commodity
+- HIGH: The idea involves genuine technical breakthroughs or dramatically novel applications of technology
 
-**Rationale**: Business model innovation is often underappreciated. Many successful startups (Spotify, Airbnb, Uber) succeeded partly through business model innovation, not just product innovation.
-
----
-
-## Dimension 3: Insight Depth
-
-### Task 3.1: Domain Knowledge Depth
-
-**Purpose**: Evaluate whether the idea reveals deep understanding of the problem domain, or whether it appears to be surface-level pattern matching.
-
-**Evaluation Criteria**:
-- Does the pitch reveal non-obvious knowledge about the domain?
-- Is there evidence of understanding why existing solutions fail?
-- Does the idea anticipate objections that would only occur to domain experts?
-- Is there evidence of genuine experience with the problem space?
-
-**Response Scale**: 4-level (Shallow/Surface/Moderate/Deep)
-- Shallow: No evidence of domain understanding; could have been generated from a template
-- Surface: Basic understanding of the domain but no non-obvious insights
-- Moderate: Shows solid domain knowledge with some non-obvious observations
-- Deep: Reveals expert-level understanding with insights that would surprise domain experts
-
-**Rationale**: Ideas born from genuine domain expertise have a different quality than those born from trend-following. This task attempts to detect the depth of understanding behind the idea.
+**Key distinctions:**
+- Using "AI" or "blockchain" is NOT innovation unless the specific application is novel
+- Trendy technology applied in obvious ways is NOT technical innovation
+- Novel algorithms, architectures, or technical approaches ARE innovation
+- Making something possible that was previously impossible IS innovation
 
 ---
 
-### Task 3.2: Contrarian Insight Presence
+## Task 4: Business Model Innovation
 
-**Purpose**: Evaluate whether the idea contains a "secret"—a belief that is both non-consensus and potentially correct.
+**Purpose:** Evaluate whether the idea introduces new ways of creating, delivering, or capturing value.
 
-**Evaluation Criteria**:
-- Does the idea rest on a belief that most people would disagree with?
-- Is there an explanation for why the conventional wisdom is wrong?
-- Does the contrarian element seem well-reasoned rather than arbitrary?
-- Would success of the idea prove something surprising about the world?
+**What to evaluate:**
+- Does the idea create value in fundamentally new ways?
+- Does it capture value through novel mechanisms?
+- Does it disintermediate or reintermediate in innovative ways?
+- Does it fundamentally change the economics of an industry?
+- Does it introduce new relationship structures between stakeholders?
 
-**Response Scale**: Binary (ABSENT/PRESENT)
-- ABSENT: The idea follows conventional wisdom; success would not prove anything surprising
-- PRESENT: The idea rests on a contrarian insight that, if correct, would overturn common assumptions
+**Scoring guidance:**
+- LOW: The idea uses conventional business models (standard SaaS, marketplace, advertising, subscription) without innovation
+- HIGH: The idea introduces genuinely new value creation or capture mechanisms
 
-**Rationale**: Peter Thiel's famous question "What important truth do few people agree with you on?" captures this dimension. The best innovations often involve being right when most people are wrong.
-
----
-
-## Dimension 4: Cliché Avoidance
-
-### Task 4.1: Formula Language Avoidance
-
-**Purpose**: Evaluate whether the idea relies on startup formula language and clichés, or whether it communicates authentically.
-
-**Evaluation Criteria**:
-- Does the pitch avoid "Uber for X" and similar formulaic descriptions?
-- Are buzzwords (AI, blockchain, disruption) used with precision or as empty placeholders?
-- Does the language feel authentic and specific rather than templated?
-- Would removing buzzwords leave substantive content?
-
-**Response Scale**: Binary (FORMULAIC/AUTHENTIC)
-- FORMULAIC: Heavy reliance on startup clichés, formula descriptions, and buzzword accumulation
-- AUTHENTIC: Communicates in specific, precise language that couldn't apply to any other idea
-
-**Rationale**: Clichéd language often signals clichéd thinking. Ideas that require startup formula language to be understood may lack genuine distinctiveness.
+**Key distinctions:**
+- Applying an existing business model to a new domain is NOT business model innovation
+- Creating new incentive structures or value flows IS innovation
+- Changing who pays, when, or for what CAN be innovation
+- Novel approaches to network effects, platforms, or ecosystems CAN be innovation
 
 ---
 
-### Task 4.2: Specificity and Substance
+## Task 5: Domain Insight Depth
 
-**Purpose**: Evaluate whether the idea contains concrete, specific content or remains at an abstract, hand-wavy level.
+**Purpose:** Evaluate whether the idea stems from deep, non-obvious understanding of a domain.
 
-**Evaluation Criteria**:
-- Are claims specific and verifiable rather than vague and aspirational?
-- Does the pitch include concrete details about how things work?
-- Is the problem described with specificity (which customers, what pain, why now)?
-- Does the solution explain mechanisms rather than just outcomes?
+**What to evaluate:**
+- Does the idea demonstrate genuine understanding of the problem space?
+- Is there evidence of non-obvious learning or discovery about the domain?
+- Can the founder articulate why previous attempts failed and why this is different?
+- Does the idea address root causes rather than symptoms?
+- Is there sophistication in understanding stakeholder needs and dynamics?
 
-**Response Scale**: 4-level (Vague/General/Specific/Highly Specific)
-- Vague: Purely abstract; no concrete details about problem, solution, or mechanism
-- General: Some specificity but mostly high-level; could describe many different ideas
-- Specific: Clear specificity about problem, solution, and mechanism; distinguishable from alternatives
-- Highly Specific: Exceptionally concrete; reveals deep thought about exactly how things work
+**Scoring guidance:**
+- LOW: The idea appears to be pattern-matching or template application without genuine domain understanding
+- HIGH: The idea clearly stems from deep, hard-won knowledge about how the domain actually works
 
-**Rationale**: Substance is the antidote to cliché. Ideas with genuine specificity are less likely to be buzzword-driven vapourware.
-
----
-
-## Dimension 5: First-Principles Thinking
-
-### Task 5.1: Assumption Questioning
-
-**Purpose**: Evaluate whether the idea questions assumptions that others take for granted, or whether it accepts industry conventions.
-
-**Evaluation Criteria**:
-- Does the idea challenge fundamental assumptions in its space?
-- Is there evidence of asking "why?" repeatedly to reach foundational truths?
-- Does the idea reject constraints that others accept as given?
-- Are industry conventions examined rather than assumed?
-
-**Response Scale**: Binary (CONVENTIONAL/QUESTIONING)
-- CONVENTIONAL: Accepts industry assumptions and conventions; innovates within established constraints
-- QUESTIONING: Challenges fundamental assumptions; asks why things must be as they are
-
-**Rationale**: First-principles thinking starts with questioning what everyone else takes for granted. This task detects whether the idea does that questioning.
+**Key distinctions:**
+- Proposing solutions without understanding the problem indicates shallow insight
+- Awareness of and learning from previous failures indicates deep insight
+- Understanding of stakeholder incentives and system dynamics indicates deep insight
+- Acknowledging what could go wrong indicates deep insight
+- Abstract hand-waving indicates shallow insight; specific concrete knowledge indicates depth
 
 ---
 
-### Task 5.2: Foundational Reasoning Evidence
+## Task 6: Contrarian Knowledge
 
-**Purpose**: Evaluate whether the idea demonstrates reasoning from fundamental constraints and possibilities, rather than from analogy to existing solutions.
+**Purpose:** Evaluate whether the idea is built on knowledge that contradicts conventional wisdom.
 
-**Evaluation Criteria**:
-- Does the pitch explain why the solution must be this way based on fundamental constraints?
-- Is there evidence of working backward from physics, economics, or human nature?
-- Does the reasoning avoid "because competitors do it" or "because that's how it's done"?
-- Would the idea survive if industry conventions changed completely?
+**What to evaluate:**
+- Does the idea rest on beliefs that most people would initially disagree with?
+- Is there evidence of contrarian but well-founded understanding?
+- Does the founder know something that experts in the field don't know or don't believe?
+- Is the unconventional knowledge specific and substantiated rather than merely contrary?
 
-**Response Scale**: 4-level (Pure Analogy/Mostly Analogy/Mostly First-Principles/Pure First-Principles)
-- Pure Analogy: Entirely based on copying or adapting existing solutions; no fundamental reasoning
-- Mostly Analogy: Primarily analogical with minor first-principles elements
-- Mostly First-Principles: Primarily derived from fundamentals with some analogical elements
-- Pure First-Principles: Entirely derived from fundamental constraints and possibilities; industry-convention-independent
+**Scoring guidance:**
+- LOW: The idea aligns with conventional wisdom and accepted best practices
+- HIGH: The idea is built on specific, substantiated knowledge that contradicts what most people believe
 
-**Rationale**: This task distinguishes ideas that represent genuine reasoning from those that are merely pattern-matching on existing successes.
-
----
-
-## Task Weighting and Score Aggregation
-
-The final innovation score is computed by aggregating task outputs. While all dimensions are important, the relative weighting reflects the philosophy articulated in ESSAY.md:
-
-- **Insight Depth** (Tasks 3.1, 3.2): 25% weight — The most important dimension; deep insight is the foundation of genuine innovation
-- **Conceptual Novelty** (Tasks 1.1, 1.2): 20% weight — Novel concepts create new categories
-- **First-Principles Thinking** (Tasks 5.1, 5.2): 20% weight — Reasoning from fundamentals generates durable innovation
-- **Technical/Business Model Innovation** (Tasks 2.1, 2.2): 20% weight — Innovation in mechanism enables differentiation
-- **Cliché Avoidance** (Tasks 4.1, 4.2): 15% weight — Signals genuine thinking but is more about expression than substance
-
-Within each dimension, tasks are weighted equally.
+**Key distinctions:**
+- Being contrarian for its own sake is NOT valuable
+- Contrarian beliefs must be substantiated with evidence or reasoning
+- "Everyone is wrong about X because Y" is the pattern of valuable contrarian knowledge
+- Secret knowledge about customer behavior, market dynamics, or technical feasibility counts
 
 ---
 
-## Implementation Notes
+## Task 7: Structural Cliché Avoidance
 
-### Input Handling
+**Purpose:** Evaluate whether the idea avoids derivative "X for Y" or "A meets B" structural clichés.
 
-Each task receives the startup idea in its native format (text, image, audio, video, or composite). The task prompts should be written to handle any modality, instructing the evaluator to assess the idea as presented regardless of format.
+**What to evaluate:**
+- Does the idea describe itself in its own terms, or by analogy to famous companies?
+- Does it avoid "Uber for X", "Airbnb for Y", or "[Company A] meets [Company B]" framing?
+- Is the value proposition articulated specifically rather than by borrowed association?
+- Does the idea stand on its own conceptual foundation?
 
-### Response Design
+**Scoring guidance:**
+- LOW: The idea primarily describes itself through analogy to successful companies
+- HIGH: The idea articulates its value proposition in fresh, specific terms without borrowing legitimacy
 
-Tasks use either binary (LOW/HIGH or similar) or 4-level response scales:
-- Binary scales are used when the distinction is categorical rather than gradated
-- 4-level scales are used when meaningful intermediate positions exist
+**Key distinctions:**
+- Using famous company analogies to quickly communicate is acceptable, but shouldn't be the ONLY framing
+- The idea should be explainable without reference to other companies
+- Original language and specific value articulation indicate genuine thinking
+- Pattern-matching to "what worked before" indicates derivative thinking
 
-### Score Computation
+---
 
-Each task outputs a normalized score in [0, 1]:
-- Binary tasks: 0.0 for the low response, 1.0 for the high response
-- 4-level tasks: 0.0, 0.33, 0.67, 1.0 for the four levels
+## Task 8: Buzzword Independence
 
-The final score aggregates these using the dimension weights described above.
+**Purpose:** Evaluate whether the idea relies on buzzwords as substance rather than specific capabilities.
+
+**What to evaluate:**
+- Does the idea use AI, blockchain, Web3, metaverse, etc. as magic words or specific tools?
+- Are technology claims specific and substantiated?
+- Is the innovation in the technology application or merely in invoking trendy terms?
+- Could the same pitch be given with different buzzwords substituted?
+
+**Scoring guidance:**
+- LOW: The idea heavily relies on buzzwords without specific explanation of how the technology creates value
+- HIGH: The idea either avoids buzzwords or uses them with specific, substantiated explanations
+
+**Key distinctions:**
+- "We use AI to..." with no specificity is buzzword reliance
+- "We use transformer models trained on X to achieve Y" is specific and legitimate
+- The test: would the pitch still make sense if you removed the buzzwords?
+- Technology should be described in terms of specific capabilities, not magical properties
+
+---
+
+## Task 9: Market Claim Authenticity
+
+**Purpose:** Evaluate whether market claims are thoughtful or clichéd.
+
+**What to evaluate:**
+- Does the idea avoid lazy market claims ("$X billion market", "everyone needs this")?
+- Are market insights specific and defensible?
+- Is there genuine understanding of the target customer?
+- Does it avoid the "1% of a huge market" fallacy?
+
+**Scoring guidance:**
+- LOW: The idea relies on generic market claims and size arguments without genuine insight
+- HIGH: The idea demonstrates specific, defensible understanding of market dynamics
+
+**Key distinctions:**
+- "If we just capture 1% of..." is a cliché that indicates shallow market thinking
+- Specific insight about customer segments, purchasing behavior, or market dynamics indicates depth
+- Understanding WHY people would switch or adopt indicates genuine market insight
+- Generic demographic targeting ("millennials want...") is lazy thinking
+
+---
+
+## Task 10: First-Principles Evidence
+
+**Purpose:** Evaluate whether the idea shows evidence of reasoning from fundamental truths.
+
+**What to evaluate:**
+- Does the idea question assumptions that others take for granted?
+- Is there evidence of rebuilding understanding from fundamentals?
+- Does the founder distinguish between physical constraints and social conventions?
+- Are the "hard parts" of the problem clearly identified and addressed?
+- Does the solution feel derived from first principles rather than pattern-matched?
+
+**Scoring guidance:**
+- LOW: The idea accepts industry conventions without questioning them; builds on unexamined assumptions
+- HIGH: The idea demonstrates clear evidence of reasoning from fundamental truths
+
+**Key distinctions:**
+- "This is how it's always been done" indicates lack of first-principles thinking
+- "Why does X cost so much? The raw materials are only..." indicates first-principles thinking
+- Distinguishing between laws of nature and conventions of practice indicates first-principles thinking
+- Questioning each assumption in the value chain indicates first-principles thinking
+
+---
+
+## Task 11: Assumption Identification
+
+**Purpose:** Evaluate whether the idea explicitly identifies and challenges key assumptions in its domain.
+
+**What to evaluate:**
+- Does the idea name the assumptions that incumbent approaches make?
+- Does it articulate which assumptions are being challenged?
+- Is there clarity about which conventions are physical necessities versus historical accidents?
+- Does the founder demonstrate awareness of their own assumptions?
+
+**Scoring guidance:**
+- LOW: The idea implicitly accepts most assumptions in the domain without examining them
+- HIGH: The idea explicitly identifies, questions, and challenges key assumptions
+
+**Key distinctions:**
+- Naming the assumption is the first step: "Everyone assumes X, but..."
+- Understanding WHY the assumption exists is important
+- Distinguishing between assumptions that must hold versus those that are merely conventional
+- Self-awareness about the idea's own assumptions indicates sophisticated thinking
+
+---
+
+## Task 12: Solution Inevitability
+
+**Purpose:** Evaluate whether the solution feels derived from deep analysis rather than imposed arbitrarily.
+
+**What to evaluate:**
+- Does the solution feel like the inevitable conclusion of clear reasoning?
+- Is there a logical chain from problem understanding to solution design?
+- Would someone else with the same insights arrive at a similar solution?
+- Does the solution address the actual root causes identified?
+
+**Scoring guidance:**
+- LOW: The solution feels arbitrary or could easily be something else entirely
+- HIGH: The solution feels like the natural, inevitable result of deep problem understanding
+
+**Key distinctions:**
+- "We could have built many things, but this felt right" suggests arbitrary choices
+- "Once you understand X, the solution becomes obvious" suggests derived solutions
+- The form of the solution should follow from the structure of the problem
+- Inevitable solutions often feel simple and obvious in retrospect
+
+---
+
+## Task 13: Paradigm Shift Potential
+
+**Purpose:** Evaluate whether the idea has potential to fundamentally change how an industry or domain operates.
+
+**What to evaluate:**
+- Could this idea, if successful, change the rules of its industry?
+- Does it have potential to obsolete existing approaches?
+- Could it create entirely new categories or markets?
+- Is the scope of potential impact transformational rather than incremental?
+
+**Scoring guidance:**
+- LOW: The idea represents incremental improvement within existing paradigms
+- HIGH: The idea has potential to fundamentally reshape its domain
+
+**Key distinctions:**
+- "Faster/cheaper/better" is incremental; "entirely different approach" is paradigm shift
+- Creating new vocabulary or categories indicates paradigm shift potential
+- Making previous approaches obsolete indicates paradigm shift potential
+- Changing customer expectations or industry economics indicates paradigm shift potential
+
+---
+
+## Task 14: Overall Innovation Impression
+
+**Purpose:** Provide a holistic assessment of the idea's innovative quality.
+
+**What to evaluate:**
+- Considering all factors together, how innovative does this idea feel?
+- Does it create a sense of encountering something genuinely new?
+- Does it demonstrate the kind of thinking that leads to breakthrough companies?
+- Would you remember this idea for its innovative qualities?
+
+**Scoring guidance:**
+- Derivative (0.0-0.2): Essentially a copy with no distinguishing insight
+- Incremental (0.2-0.4): Modest improvements to existing concepts
+- Solid (0.4-0.6): Genuine thought and some novelty
+- Innovative (0.6-0.8): Genuinely new approaches or non-obvious insights
+- Exceptional (0.8-1.0): Potential paradigm shift
+
+**Key distinctions:**
+- This is a gut-check that considers all dimensions holistically
+- The idea should be evaluated on its innovative merit, not execution viability
+- Production quality of the pitch should not influence the innovation assessment
+- The question is: "How innovative is this thinking?" not "Will this succeed?"
+
+---
+
+## Aggregation Notes
+
+The final innovation quality score aggregates across all tasks. The design assumes:
+- All tasks contribute to the final score
+- Different ideas may excel on different dimensions
+- The holistic impression (Task 14) serves as a calibration check
+- The score should reflect overall innovative merit, not just novelty
+
+Each task should evaluate the idea based on the content presented, regardless of the modality (text, image, audio, video, or composite). The scorer should look past presentation polish to evaluate the underlying innovation quality of the idea itself.

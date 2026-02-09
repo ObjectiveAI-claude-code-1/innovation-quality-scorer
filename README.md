@@ -4,89 +4,75 @@ A scalar function that evaluates the creative and innovative merit of startup id
 
 ## Overview
 
-This function assesses startup ideas across five key dimensions of innovation quality, returning a score from 0 (purely derivative) to 1 (breakthrough innovation).
+This function analyzes startup ideas across multiple dimensions of innovation quality, returning a score from 0 (completely derivative) to 1 (genuinely groundbreaking). It's designed to assess the thinking behind an idea rather than its execution viability.
 
 ## Input
 
-The function accepts a single `idea` field which can be:
+The function accepts startup ideas in multiple formats:
 
-- **Text**: A written pitch or description of the startup idea
-- **Image**: A pitch deck slide, mockup, or diagram
-- **Audio**: A verbal pitch or audio explanation
-- **Video**: A demo video or pitch recording
-- **Composite**: An array combining multiple formats (e.g., slides with narration)
-
-### Example Input
-
-```json
-{
-  "idea": "We're building a prediction market for scientific reproducibility. Researchers stake tokens on whether published studies will replicate, creating financial incentives for honest assessment."
-}
-```
-
-## Output
-
-A scalar score in the range [0, 1]:
-
-- **0.0**: Purely derivative thinking, no innovation
-- **0.25**: Low innovation, mostly familiar patterns
-- **0.50**: Moderate innovation, some novel elements
-- **0.75**: High innovation, significant novel elements
-- **1.0**: Breakthrough innovation, category-defining
+- **Text**: Elevator pitches, executive summaries, one-liners, or detailed descriptions
+- **Image**: Pitch deck slides, napkin sketches, product mockups, or concept diagrams
+- **Audio**: Recorded pitches, founder interviews, or verbal explanations
+- **Video**: Demo videos, pitch recordings, or prototype demonstrations
+- **Composite**: Arrays combining multiple elements (e.g., pitch deck with text, images, and embedded videos)
 
 ## Evaluation Dimensions
 
-The function evaluates ideas across five dimensions:
+### Conceptual Novelty
+- **Core Concept Novelty**: Is this genuinely new or derivative?
+- **Problem Reframing**: Does it reveal new ways of understanding existing problems?
 
-### 1. Conceptual Novelty (20%)
-- **Domain Combination**: Does the idea synthesize disparate domains unexpectedly?
-- **Problem Framing**: Does it reframe the problem in a genuinely new way?
+### Technical/Business Model Innovation
+- **Technical Innovation**: Genuine breakthroughs vs. trendy tech applications
+- **Business Model Innovation**: Novel value creation and capture mechanisms
 
-### 2. Technical/Business Model Innovation (20%)
-- **Technical Approach**: Does it propose genuinely novel technical methods?
-- **Business Model**: Does it create/capture value in a novel way?
+### Insight Depth
+- **Domain Insight Depth**: Evidence of hard-won, non-obvious domain knowledge
+- **Contrarian Knowledge**: Specific, substantiated beliefs that contradict conventional wisdom
 
-### 3. Insight Depth (25%)
-- **Domain Knowledge**: Does it reveal deep domain understanding?
-- **Contrarian Insight**: Does it contain a non-consensus "secret"?
+### Cliché Avoidance
+- **Structural Cliché Avoidance**: Avoiding "Uber for X" or "A meets B" patterns
+- **Buzzword Independence**: Technology as specific capability, not magic words
+- **Market Claim Authenticity**: Specific market insight vs. lazy "$X billion market" claims
 
-### 4. Cliché Avoidance (15%)
-- **Formula Language**: Does it avoid "Uber for X" patterns?
-- **Specificity**: Does it contain concrete substance, not buzzwords?
+### First-Principles Thinking
+- **First-Principles Evidence**: Reasoning from fundamental truths
+- **Assumption Identification**: Explicitly questioning domain assumptions
+- **Solution Inevitability**: Solutions derived from deep analysis, not arbitrary choices
 
-### 5. First-Principles Thinking (20%)
-- **Assumption Questioning**: Does it challenge industry conventions?
-- **Foundational Reasoning**: Does it reason from fundamentals, not analogy?
+### Holistic Assessment
+- **Paradigm Shift Potential**: Potential to fundamentally reshape its domain
+- **Overall Innovation Quality**: Comprehensive assessment across all dimensions
 
-## Use Cases
+## Output
 
-- **Venture Capital**: Screen startup pitches for innovative potential
-- **Accelerators**: Evaluate applications for innovative merit
-- **Corporate Innovation**: Assess internal innovation proposals
-- **Founders**: Self-assess ideas before pitching
-- **Research**: Study patterns in startup innovation
+A scalar score between 0 and 1:
 
-## Multimodal Support
+| Score Range | Category | Description |
+|-------------|----------|-------------|
+| 0.0 - 0.2 | Derivative | Essentially a copy with no distinguishing insight |
+| 0.2 - 0.4 | Incremental | Modest improvements to existing concepts |
+| 0.4 - 0.6 | Solid | Genuine thought and some novelty |
+| 0.6 - 0.8 | Innovative | Genuinely new approaches or non-obvious insights |
+| 0.8 - 1.0 | Exceptional | Potential paradigm shift with profound originality |
 
-The function handles all input modalities natively:
+## Example Usage
 
 ```json
-// Image input
 {
-  "idea": {"type": "image_url", "image_url": {"url": "https://example.com/pitch-slide.png"}}
-}
-
-// Video input  
-{
-  "idea": {"type": "video_url", "video_url": {"url": "https://example.com/demo.mp4"}}
-}
-
-// Composite input
-{
-  "idea": [
-    "Our pitch:",
-    {"type": "image_url", "image_url": {"url": "https://example.com/slide1.png"}},
-    {"type": "image_url", "image_url": {"url": "https://example.com/slide2.png"}}
-  ]
+  "idea": "A platform that uses satellite imagery and machine learning to predict crop yields 6 months in advance, enabling farmers in developing countries to secure fair-price forward contracts before harvest."
 }
 ```
+
+## Key Distinctions
+
+The function distinguishes between:
+- Being first in a geography vs. conceptual novelty
+- Using AI/blockchain as buzzwords vs. specific technical innovation
+- "Faster/cheaper/better" vs. paradigm shifts
+- Pattern-matching to successful companies vs. first-principles reasoning
+- Surface-level market claims vs. genuine customer insight
+
+## Note
+
+This scorer evaluates innovation merit, not execution viability. A highly innovative idea may still face significant market, technical, or operational challenges. The question answered is "How innovative is this thinking?" not "Will this succeed?"
